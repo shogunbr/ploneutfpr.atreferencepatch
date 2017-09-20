@@ -1,0 +1,38 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:five="http://namespaces.zope.org/five"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    xmlns:monkey="http://namespaces.plone.org/monkey"
+    xmlns:i18n="http://namespaces.zope.org/i18n"
+    i18n_domain="ploneutfpr.atreferencepatch">
+
+  <i18n:registerTranslations directory="locales" />
+
+  <includeDependencies package="." />
+
+  <include package=".browser" />
+
+
+  <genericsetup:registerProfile
+      name="default"
+      title="ploneutfpr.atreferencepatch"
+      directory="profiles/default"
+      description="Installs the ploneutfpr.atreferencepatch add-on."
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+
+  <genericsetup:importStep
+      name="ploneutfpr.atreferencepatch-postInstall"
+      title="ploneutfpr.atreferencepatch post_install import step"
+      description="Post install import step from ploneutfpr.atreferencepatch"
+      handler=".setuphandlers.post_install">
+  </genericsetup:importStep>
+
+   <monkey:patch
+        description="Patch para arrumar erro ao excluir referencias https://github.com/plone/Products.Archetypes/commit/51bca84f0a3f7ff54a330e4fcba8afe7fda7b654"
+        class="Products.Archetypes.ReferenceEngine.ReferenceCatalog"
+        original="_deleteReference"
+        replacement=".patch.patched_deleteReference"
+        />
+
+</configure>
